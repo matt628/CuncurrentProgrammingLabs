@@ -6,6 +6,7 @@ public class Producer extends Thread {
     ThreadSafeStorage threadSafeStorage;
     int id;
     int portionSize;
+    boolean report = false;
     int successInsertionCounter = 0;
 
     Producer(ThreadSafeStorage threadSafeStorage, int id, int portionSize) {
@@ -23,7 +24,9 @@ public class Producer extends Thread {
                 threadSafeStorage.put(list);
             } catch (InterruptedException e) {
                 successInsertionCounter--;
-                System.out.println("Producer " + id + " failed inserting " + portionSize + " items");
+                if (report) {
+                    System.out.println("Producer " + id + " failed inserting " + portionSize + " items");
+                }
 //                System.out.println(System.out.format("Producer %d failed inserting %d items\n", id, portionSize));
 //                e.printStackTrace();
             }
@@ -37,7 +40,17 @@ public class Producer extends Thread {
             result.add("xxx");  // TODO generate random strings
         }
 //        System.out.println(System.out.format("Producer %d produced %d items\n", id, portionSize));
-        System.out.println("Producer " + id + " produced " + portionSize + " items");
+        if(report) {
+            System.out.println("Producer " + id + " produced " + portionSize + " items");
+        }
         return result;
+    }
+
+    public void tellMeAboutYoursefl(){
+        System.out.println("Producer " + id + "was inserting" + portionSize + " items. I manged to do " + successInsertionCounter + " insertions");
+    }
+
+    public void setReport(boolean report) {
+        this.report = report;
     }
 }

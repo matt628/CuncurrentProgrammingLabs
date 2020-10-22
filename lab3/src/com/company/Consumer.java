@@ -4,6 +4,7 @@ public class Consumer extends Thread{
     ThreadSafeStorage threadSafeStorage;
     int id;
     int portionSize;
+    boolean report = false;
     Consumer(ThreadSafeStorage threadSafeStorage, int id, int portionSize){
         this.threadSafeStorage = threadSafeStorage;
         this.id = id;
@@ -15,14 +16,22 @@ public class Consumer extends Thread{
             try {
                 consume();
             } catch (InterruptedException e) {
-                System.out.println("Consumer " + id + "failed consuming " + portionSize + " items");
+                if (report) {
+                    System.out.println("Consumer " + id + "failed consuming " + portionSize + " items");
+                }
 //                e.printStackTrace();
             }
         }
     }
 
     private void consume() throws InterruptedException {
-        System.out.println("Consumer " + id + " is consuming " + portionSize + " items");
+        if(report) {
+            System.out.println("Consumer " + id + " is consuming " + portionSize + " items");
+        }
         threadSafeStorage.take(portionSize);
+    }
+
+    public void setReport(boolean report) {
+        this.report = report;
     }
 }

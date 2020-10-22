@@ -27,7 +27,7 @@ public class ThreadSafeStorage {
             while (items.size() + toInsert.size() > maxArraySize)
                 notFull.await();
             items.addAll(toInsert);
-            notEmpty.signal();
+            notEmpty.signalAll();
         } finally {
             lock.unlock();
         }
@@ -42,7 +42,7 @@ public class ThreadSafeStorage {
             for(int i = 0; i < quantityToTake; i++){ //todo refactor
                 result.add(items.remove(0));
             }
-            notFull.signal();
+            notFull.signalAll();
             return result;
         } finally {
             lock.unlock();
